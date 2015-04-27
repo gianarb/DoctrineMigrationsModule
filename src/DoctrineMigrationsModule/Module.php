@@ -55,16 +55,4 @@ class Module implements ConfigProviderInterface, InitProviderInterface
     {
         return include __DIR__ . '/../../config/module.config.php';
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getConsoleUsage(Console $console)
-    {
-        /* @var $cli \Symfony\Component\Console\Application */
-        $cli    = $this->serviceManager->get('doctrine.cli');
-        $output = new PropertyOutput();
-        $cli->run(new StringInput('list'), $output);
-        return $output->getMessage();
-    }
 }
