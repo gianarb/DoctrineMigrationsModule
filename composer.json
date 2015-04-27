@@ -1,0 +1,32 @@
+{
+    "name": "doctrine/doctrine-migrations-module",
+    "description": "Zend Framework 2 Module to manage integration with doctrine/migrations",
+    "require": {
+        "doctrine/migrations": "1.0.*@dev",
+        "zendframework/zend-servicemanager": "~2.3",
+        "zendframework/zend-console": "~2.3",
+        "zendframework/zend-modulemanager": "~2.3",
+        "doctrine/doctrine-orm-module": "~0.8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4",
+        "zendframework/zendframework": "~2.3",
+        "doctrine/coding-standard": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "DoctrineMigrationsModule\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "DoctrineORMModuleTest\\": "vendor/doctrine/doctrine-orm-module/tests"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gianluca Arbezzano",
+            "email": "gianarb92@gmail.com"
+        }
+    ]
+}
