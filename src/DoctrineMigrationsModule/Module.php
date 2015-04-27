@@ -6,9 +6,16 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\ModuleManagerInterface;
 use Zend\Console\Adapter\AdapterInterface as Console;
 use Symfony\Component\Console\Input\StringInput;
+use DoctrineModule\Component\Console\Output\PropertyOutput;
+use Doctrine\DBAL\Version;
 
 class Module implements ConfigProviderInterface, InitProviderInterface
 {
+    /**
+     *  @var $serviceManager  \Zend\ServiceManager\ServiceLocatorInterface
+     */
+    private $serviceManager;
+
     /**
      * {@inheritDoc}
      */
@@ -22,8 +29,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface
     {
         /* @var $cli \Symfony\Component\Console\Application */
         $cli            = $event->getTarget();
-        /* @var $serviceLocator \Zend\ServiceManager\ServiceLocatorInterface */
-        $serviceLocator = $event->getParam('ServiceManager');
+        $this->serviceManager = $event->getParam('ServiceManager');
         $commands = array(
             'doctrine.migrations_cmd.execute',
             'doctrine.migrations_cmd.generate',
@@ -33,9 +39,14 @@ class Module implements ConfigProviderInterface, InitProviderInterface
             'doctrine.migrations_cmd.diff',
             'doctrine.migrations_cmd.latest',
         );
-        $cli->addCommands(array_map(array($serviceLocator, 'get'), $commands));
+        $cli->addCommands(array_map(array($this->serviceManager, 'get'), $commands));
         $helperSet     = $cli->getHelperSet();
-        $helperSet->set(new \Symfony\Component\Console\Helper\DialogHelper(), 'dialog');
+        if(Version::compare("2.5.0") == -1) {
+            $helperSet->set(new \Symfony\Component\Console\Helper\QuestionHelper(), 'dialog');
+        } else {
+            $helperSet->set(new \Symfony\Component\Console\Helper\QuestionHelper(), 'dialog');
+        }
+
     }
     /**
      * {@inheritDoc}
@@ -44,6 +55,7 @@ class Module implements ConfigProviderInterface, InitProviderInterface
     {
         return include __DIR__ . '/../../config/module.config.php';
     }
+
     /**
      * {@inheritDoc}
      */
