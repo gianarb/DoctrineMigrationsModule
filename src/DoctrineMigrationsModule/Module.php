@@ -41,10 +41,10 @@ class Module implements ConfigProviderInterface, InitProviderInterface
         );
         $cli->addCommands(array_map(array($this->serviceManager, 'get'), $commands));
         $helperSet     = $cli->getHelperSet();
-        if(Version::compare("2.5.0") == -1) {
+        if(Version::compare("2.5.0") <= 0) {
             $helperSet->set(new \Symfony\Component\Console\Helper\QuestionHelper(), 'dialog');
         } else {
-            $helperSet->set(new \Symfony\Component\Console\Helper\QuestionHelper(), 'dialog');
+            $helperSet->set(new \Symfony\Component\Console\Helper\DialogHelper(), 'dialog');
         }
 
     }
